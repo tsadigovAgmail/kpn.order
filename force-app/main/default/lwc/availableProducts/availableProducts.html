@@ -1,5 +1,5 @@
 <template>
-    <div style="height: 300px;">
+    <lightning-card title="Available Products">
         <c-error-panel errors={error}></c-error-panel>
         <lightning-input type="text" value={filterString} placeholder="product name" onchange={handleKeyChange} ></lightning-input>
         <lightning-datatable
@@ -13,5 +13,5 @@
                 onrowaction={handleRowAction}
                 >
         </lightning-datatable>
-    </div>  
+    </lightning-card>  
 </template>

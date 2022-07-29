@@ -1,5 +1,5 @@
 <template>
-    <div style="height: 300px;">
+    <lightning-card title="Order Products">
         <lightning-datatable
                 key-field="id"
                 data={products.data}
@@ -9,5 +9,5 @@
                 onsort={doSorting}
                 hide-checkbox-column="false">
         </lightning-datatable>
-    </div>  
+    </lightning-card>
 </template>
