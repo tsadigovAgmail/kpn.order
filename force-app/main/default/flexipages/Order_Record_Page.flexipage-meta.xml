@@ -82,6 +82,12 @@
         </itemInstances>
         <itemInstances>
             <componentInstance>
+                <componentName>orderProducts</componentName>
+                <identifier>c_orderProducts</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
                 <componentName>force:detailPanel</componentName>
                 <identifier>force_detailPanel</identifier>
             </componentInstance>

@@ -17,3 +17,17 @@
     a. When the same product is not yet added to the order it will be added with a quantity of 1
     
     b. When the product already exists the quantity of the existing order product should be increased by 1
+
+
+
+# Order Products – displays products added to the current order
+
+4. ✅component has to display the order products in a table displaying the Name, Unit Price, Quantity and Total Price
+
+    a. When the user adds a new product or updates an existing product on the order (see point 3) the list is refreshed to display the newly added 
+
+    b. ✅(Optional) Sort the list by column
+
+5. component has an “Activate” button that sets the status of the order and order items to “Activated”
+
+    a. When activated the end user will not be able to add new order items or confirm the order for a second time.

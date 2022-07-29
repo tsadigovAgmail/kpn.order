@@ -1,22 +1,24 @@
 import { LightningElement, wire, api, track } from 'lwc';
-import getData from "@salesforce/apex/OrderProductController.getAvailableProducts";
+import getData from "@salesforce/apex/OrderProductController.getOrderProducts";
+
 
 const columns = [
-    { label: 'Name', fieldName: 'Name', sortable: "true"  },
-    { label: 'List Price', fieldName: 'UnitPrice', sortable: "true" }
+    { label: 'Name', fieldName: 'ProductName__c', sortable : "true" },
+    { label: 'Unit Price', fieldName: 'UnitPrice', sortable : "true" },
+    { label: 'Quantity', fieldName: 'Quantity', sortable : "true" },
+    { label: 'Total Price', fieldName: 'TotalPrice', sortable : "true" }
 ];
 
-export default class AvailableProducts extends LightningElement {
+export default class OrderProducts extends LightningElement {
     @api 
     recordId;
     @wire(getData,{ orderId: '$recordId'})
     products = [];
     columns = columns;
-
     get count(){
         return this.products?.data?.length || 0;
     }
-
+    
     @track sortBy;
     @track sortDirection;
     doSorting(event) {
@@ -48,5 +50,5 @@ export default class AvailableProducts extends LightningElement {
             this.products = {data: parseData, error: exp};
             console.error(exp);
         }
-    }  
+    }    
 }
