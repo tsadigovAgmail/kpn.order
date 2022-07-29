@@ -2,7 +2,7 @@
 
 1. ✅ “Available Products” - displays available products suitable for Order based on Order’s price book
 
-2. The “Available Products” component displays orderable products in a 2-column list displaying Name and List Price
+2. ✅The “Available Products” component displays orderable products in a 2-column list displaying Name and List Price
 
     a. ✅Products that are already added to the order should appear on top 
     
@@ -10,7 +10,7 @@
     
     c. ✅(Optional) Sort by column
     
-    d. (Optional) Search by product name
+    d. ✅(Optional) Search by product name
 
 3. The “Available Products” component has to provide the ability for the user to add a product from the list to the order
 

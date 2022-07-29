@@ -23,6 +23,13 @@ export default class AvailableProducts extends LightningElement {
     @track 
     sortedDirection = 'asc';
 
+    @api
+    filterString
+    
+    handleKeyChange(event){
+        this.filterString = event.target.value;
+    }
+
     columns = columns;
 
     // provides back reference relation [priceBookEntry]->[orderLineItem] 
@@ -51,7 +58,11 @@ export default class AvailableProducts extends LightningElement {
     }
 
     get sortedProducts(){
-        return this.mergedProducts?.sort(
+        return this.mergedProducts
+        ?.filter( (prod)=> 
+            (!this.filterString || prod.Name?.includes(this.filterString))
+        )
+        ?.sort(
             (a, b)=>{
                 if(a.existing  != b.existing){ // 2.a Products that are already added to the order should appear on top 
                     return a.existing ? -1 : 1;

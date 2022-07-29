@@ -1,5 +1,6 @@
 <template>
     <div style="height: 300px;">
+        <lightning-input type="text" value={filterString} placeholder="product name" onchange={handleKeyChange} ></lightning-input>
         <lightning-datatable
                 key-field="id"
                 data={sortedProducts}
