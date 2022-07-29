@@ -3,7 +3,7 @@ import getAvailableProducts from "@salesforce/apex/OrderProductController.getAva
 import getOrderProducts from "@salesforce/apex/OrderProductController.getOrderProducts";
 
 const columns = [
-    { label: 'Name', fieldName: 'Name', sortable: "true"},
+    { label: 'Name', fieldName: 'Name', sortable: "true", cellAttributes:{ class:{fieldName:'textColor'}}},
     { label: 'List Price', fieldName: 'UnitPrice', sortable: "true"}
 ];
 
@@ -38,14 +38,17 @@ export default class AvailableProducts extends LightningElement {
             const result=this.products?.data?.map(
                 availableProduct =>{
                     const idx = this.orderProducts?.data?.findIndex( ( orderProd ) => orderProd.PricebookEntryId == availableProduct.Id );
-                    const orderProd = idx >= 0 ? this.orderProducts.data[idx] : {};
+                    const existing = idx >= 0;
+                    const orderProd = existing ? this.orderProducts.data[idx] : {};
+                    const style = existing ? {textColor:'slds-text-color_success'}:{};
                     
                     return {
                         ...orderProd,
                         ...availableProduct,
                         ...{
-                            existing : idx >= 0 
-                        }
+                            existing : existing 
+                        },
+                        ...style,
                     };
                 }
             );
