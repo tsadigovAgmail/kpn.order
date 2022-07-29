@@ -1,14 +1,14 @@
 # AvailableProducts - displays available products suitable for Order based on Order’s pricebook
 
-1. “Available Products” - displays available products suitable for Order based on Order’s price book
+1. ✅ “Available Products” - displays available products suitable for Order based on Order’s price book
 
 2. The “Available Products” component displays orderable products in a 2-column list displaying Name and List Price
 
     a. Products that are already added to the order should appear on top
     
-    b. Each product can only appear once in the list
+    ✅ b. Each product can only appear once in the list
     
-    c. (Optional) Sort by column
+    ✅ c. (Optional) Sort by column
     
     d. (Optional) Search by product name
 
