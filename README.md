@@ -24,7 +24,7 @@
 
 4. ✅component has to display the order products in a table displaying the Name, Unit Price, Quantity and Total Price
 
-    a. When the user adds a new product or updates an existing product on the order (see point 3) the list is refreshed to display the newly added 
+    a. ✅When the user adds a new product or updates an existing product on the order (see point 3) the list is refreshed to display the newly added (NOTE: needs setting up CDC for OrderItem)
 
     b. ✅(Optional) Sort the list by column
 
