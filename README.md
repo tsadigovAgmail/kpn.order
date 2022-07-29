@@ -4,11 +4,11 @@
 
 2. The “Available Products” component displays orderable products in a 2-column list displaying Name and List Price
 
-    a. Products that are already added to the order should appear on top
+    a. ✅Products that are already added to the order should appear on top 
     
-    ✅ b. Each product can only appear once in the list
+    b. ✅Each product can only appear once in the list
     
-    ✅ c. (Optional) Sort by column
+    c. ✅(Optional) Sort by column
     
     d. (Optional) Search by product name
 

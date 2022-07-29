@@ -2,12 +2,13 @@
     <div style="height: 300px;">
         <lightning-datatable
                 key-field="id"
-                data={products.data}
+                data={sortedProducts}
                 columns={columns}
-                sorted-by={sortBy}
-                sorted-direction={sortDirection}
-                onsort={doSorting}
-                hide-checkbox-column="false">
+                hide-checkbox-column="false"
+                onsort={updateColumnSorting}
+                sorted-by={sortedBy}
+                sorted-direction={sortedDirection}
+                >
         </lightning-datatable>
     </div>  
 </template>

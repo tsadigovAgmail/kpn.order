@@ -1,52 +1,76 @@
 import { LightningElement, wire, api, track } from 'lwc';
-import getData from "@salesforce/apex/OrderProductController.getAvailableProducts";
+import getAvailableProducts from "@salesforce/apex/OrderProductController.getAvailableProducts";
+import getOrderProducts from "@salesforce/apex/OrderProductController.getOrderProducts";
 
 const columns = [
-    { label: 'Name', fieldName: 'Name', sortable: "true"  },
-    { label: 'List Price', fieldName: 'UnitPrice', sortable: "true" }
+    { label: 'Name', fieldName: 'Name', sortable: "true"},
+    { label: 'List Price', fieldName: 'UnitPrice', sortable: "true"}
 ];
 
 export default class AvailableProducts extends LightningElement {
     @api 
     recordId;
-    @wire(getData,{ orderId: '$recordId'})
-    products = [];
+    
+    @wire(getAvailableProducts,{ orderId: '$recordId'})
+    products ;
+
+    @wire(getOrderProducts,{ orderId: '$recordId'})
+    orderProducts ;
+
+    @track 
+    sortedBy = 'Name';
+
+    @track 
+    sortedDirection = 'asc';
+
     columns = columns;
 
-    get count(){
-        return this.products?.data?.length || 0;
-    }
-
-    @track sortBy;
-    @track sortDirection;
-    doSorting(event) {
-        this.sortBy = event.detail.fieldName;
-        this.sortDirection = event.detail.sortDirection;
-        this.sortData(this.sortBy, this.sortDirection);
-    }
-
-    sortData(fieldname, direction) {
+    // provides back reference relation [priceBookEntry]->[orderLineItem] 
+    get mergedProducts(){
         try{
-            let parseData = [...this.products.data];//JSON.parse(JSON.stringify(this.data));
-            // Return the value stored in the field
-            let keyValue = (a) => {
-                return a[fieldname];
-            };
-            // cheking reverse direction
-            let isReverse = direction === 'asc' ? 1: -1;
-            // sorting data
-            parseData.sort((x, y) => {
-                x = keyValue(x) || ''; // handling null values
-                y = keyValue(y) || '';
-                // sorting values based on direction
-                let result = isReverse * ((x > y) - (y > x));
-                console.log(result);
-                return result;
-            });
-            this.products = {data: parseData, error: undefined};
-        }catch(exp){
-            this.products = {data: parseData, error: exp};
+            const result=this.products?.data?.map(
+                availableProduct =>{
+                    const idx = this.orderProducts?.data?.findIndex( ( orderProd ) => orderProd.PricebookEntryId == availableProduct.Id );
+                    const orderProd = idx >= 0 ? this.orderProducts.data[idx] : {};
+                    
+                    return {
+                        ...orderProd,
+                        ...availableProduct,
+                        ...{
+                            existing : idx >= 0 
+                        }
+                    };
+                }
+            );
+            return result;
+        }
+        catch(exp){
             console.error(exp);
         }
-    }  
+        
+    }
+
+    get sortedProducts(){
+        return this.mergedProducts?.sort(
+            (a, b)=>{
+                if(a.existing  != b.existing){ // 2.a Products that are already added to the order should appear on top 
+                    return a.existing ? -1 : 1;
+                }
+                else{
+                    let ax = a[this.sortedBy];
+                    let bx = b[this.sortedBy];
+                    if(ax == bx)
+                        return 0;
+                    else 
+                        return (ax > bx ? 1 : -1) * (this.sortedDirection == 'desc' ? -1 : 1);
+                }
+            }
+        );
+    }
+
+    updateColumnSorting(event) {
+        this.sortedBy = event.detail.fieldName;
+        this.sortedDirection = event.detail.sortDirection;
+   }
+
 }
