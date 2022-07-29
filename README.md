@@ -14,9 +14,9 @@
 
 3. The “Available Products” component has to provide the ability for the user to add a product from the list to the order
 
-    a. When the same product is not yet added to the order it will be added with a quantity of 1
+    a. ✅When the same product is not yet added to the order it will be added with a quantity of 1
     
-    b. When the product already exists the quantity of the existing order product should be increased by 1
+    b. ✅When the product already exists the quantity of the existing order product should be increased by 1
 
 
 

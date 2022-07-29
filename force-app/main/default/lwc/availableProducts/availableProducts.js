@@ -1,10 +1,17 @@
 import { LightningElement, wire, api, track } from 'lwc';
 import getAvailableProducts from "@salesforce/apex/OrderProductController.getAvailableProducts";
 import getOrderProducts from "@salesforce/apex/OrderProductController.getOrderProducts";
+import addProduct from "@salesforce/apex/OrderProductController.addProduct";
+
+
+const actions = [
+    { label: 'add to order', name: 'add' }
+];
 
 const columns = [
     { label: 'Name', fieldName: 'Name', sortable: "true", cellAttributes:{ class:{fieldName:'textColor'}}},
-    { label: 'List Price', fieldName: 'UnitPrice', sortable: "true"}
+    { label: 'List Price', fieldName: 'UnitPrice', sortable: "true"},
+    { type: 'action', typeAttributes: { rowActions: actions, menuAlignment: 'left' } }
 ];
 
 export default class AvailableProducts extends LightningElement {
@@ -14,7 +21,10 @@ export default class AvailableProducts extends LightningElement {
     @wire(getAvailableProducts,{ orderId: '$recordId'})
     products ;
 
-    @wire(getOrderProducts,{ orderId: '$recordId'})
+    @track
+    refreshTime = Date.now();
+
+    @wire(getOrderProducts,{ orderId: '$recordId', refreshTime:'$refreshTime'})
     orderProducts ;
 
     @track 
@@ -37,16 +47,21 @@ export default class AvailableProducts extends LightningElement {
         try{
             const result=this.products?.data?.map(
                 availableProduct =>{
-                    const idx = this.orderProducts?.data?.findIndex( ( orderProd ) => orderProd.PricebookEntryId == availableProduct.Id );
+                    const idx = this.orderProducts?.data?.findIndex( ( orderProduct ) => orderProduct.PricebookEntryId == availableProduct.Id );
                     const existing = idx >= 0;
-                    const orderProd = existing ? this.orderProducts.data[idx] : {};
+                    const orderProduct = existing ? this.orderProducts.data[idx] : {};
                     const style = existing ? {textColor:'slds-text-color_success'}:{};
                     
                     return {
-                        ...orderProd,
                         ...availableProduct,
                         ...{
-                            existing : existing 
+                            existing : existing,
+                            OrderProductId: orderProduct?.Id,
+                            Quantity: orderProduct?.Quantity || 0,
+                            Product2Id: availableProduct.Product2Id,
+                            PriceBookEntryId: availableProduct.Id,
+                            OrderId: this.recordId,
+                            OrderProduct:orderProduct
                         },
                         ...style,
                     };
@@ -58,6 +73,10 @@ export default class AvailableProducts extends LightningElement {
             console.error(exp);
         }
         
+    }
+
+    get error(){
+        return [this.products.error];
     }
 
     get sortedProducts(){
@@ -86,5 +105,25 @@ export default class AvailableProducts extends LightningElement {
         this.sortedBy = event.detail.fieldName;
         this.sortedDirection = event.detail.sortDirection;
    }
+
+    handleRowAction(event) {
+        const action = event.detail.action;
+        const row = event.detail.row;
+        switch (action.name) {
+            case 'add':
+                const record={
+                    Id:row.OrderProductId, 
+                    OrderId:row.OrderId, 
+                    PriceBookEntryId:row.PriceBookEntryId,
+                    UnitPrice: row.UnitPrice,
+                    Quantity:row.Quantity
+                };
+                addProduct({item:record})
+                    .then(result=>this.refreshTime = Date.now())//TODO: we have all the data at hand, can do without fetching from server
+                    .catch(e=>this.products.error = e.body.message + '\n' + e.body.stackTrace);
+                break;
+        }
+    }
+
 
 }

@@ -29,4 +29,18 @@ public with sharing class OrderProductController {
             LIMIT 200
         ];//TODO: paging
     }
+
+
+    @AuraEnabled()
+    public static OrderItem addProduct(Map<string, object> item){
+        //TODO: fix this, directly accept OrderItem
+        OrderItem itemObject = (OrderItem)JSON.deserialize(JSON.serialize(item), OrderItem.class);
+
+        if(null == itemObject.Quantity){
+            itemObject.Quantity = 0;
+        }
+        itemObject.Quantity = itemObject.Quantity + 1; //TODO: consider moving this to client side also
+        upsert itemObject;
+        return itemObject;
+    }
 }

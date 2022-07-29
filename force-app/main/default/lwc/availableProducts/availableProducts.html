@@ -1,5 +1,6 @@
 <template>
     <div style="height: 300px;">
+        <c-error-panel errors={error}></c-error-panel>
         <lightning-input type="text" value={filterString} placeholder="product name" onchange={handleKeyChange} ></lightning-input>
         <lightning-datatable
                 key-field="id"
@@ -9,6 +10,7 @@
                 onsort={updateColumnSorting}
                 sorted-by={sortedBy}
                 sorted-direction={sortedDirection}
+                onrowaction={handleRowAction}
                 >
         </lightning-datatable>
     </div>  
