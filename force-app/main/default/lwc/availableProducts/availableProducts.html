@@ -1,17 +1,22 @@
 <template>
-    <lightning-card title="Available Products">
-        <c-error-panel errors={error}></c-error-panel>
-        <lightning-input type="text" value={filterString} placeholder="product name" onchange={handleKeyChange} ></lightning-input>
-        <lightning-datatable
-                key-field="id"
-                data={sortedProducts}
-                columns={columns}
-                hide-checkbox-column="false"
-                onsort={updateColumnSorting}
-                sorted-by={sortedBy}
-                sorted-direction={sortedDirection}
-                onrowaction={handleRowAction}
-                >
-        </lightning-datatable>
-    </lightning-card>  
+    <template if:true={notActivated}>
+        <lightning-card title="Available Products">
+            <c-error-panel errors={error}></c-error-panel>
+            <lightning-input type="text" value={filterString} placeholder="product name" onchange={handleKeyChange} ></lightning-input>
+            <lightning-datatable
+                    key-field="id"
+                    data={sortedProducts}
+                    columns={columns}
+                    hide-checkbox-column="false"
+                    onsort={updateColumnSorting}
+                    sorted-by={sortedBy}
+                    sorted-direction={sortedDirection}
+                    onrowaction={handleRowAction}
+                    >
+            </lightning-datatable>
+            <center>
+                <lightning-button variant="destructive" label="ACTIVATE" title="ACTIVATE" onclick={handleActivate} class="slds-m-left_x-small"></lightning-button>
+            </center>
+        </lightning-card>
+    </template>
 </template>

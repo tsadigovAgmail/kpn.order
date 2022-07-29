@@ -1,7 +1,10 @@
 import { LightningElement, wire, api, track } from 'lwc';
 import getAvailableProducts from "@salesforce/apex/OrderProductController.getAvailableProducts";
 import getOrderProducts from "@salesforce/apex/OrderProductController.getOrderProducts";
+import getOrderStatus from "@salesforce/apex/OrderProductController.getOrderStatus";
 import addProduct from "@salesforce/apex/OrderProductController.addProduct";
+import activate from "@salesforce/apex/OrderProductController.activate";
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 
 const actions = [
@@ -17,6 +20,9 @@ const columns = [
 export default class AvailableProducts extends LightningElement {
     @api 
     recordId;
+
+    @wire(getOrderStatus, { orderId: '$recordId', refreshTime:'$refreshTime'})
+    orderStatus;
     
     @wire(getAvailableProducts,{ orderId: '$recordId'})
     products ;
@@ -41,6 +47,10 @@ export default class AvailableProducts extends LightningElement {
     }
 
     columns = columns;
+
+    get notActivated(){
+        return this.orderStatus && 'Activated' != this.orderStatus.data;
+    }
 
     // provides back reference relation [priceBookEntry]->[orderLineItem] 
     get mergedProducts(){
@@ -70,7 +80,7 @@ export default class AvailableProducts extends LightningElement {
             return result;
         }
         catch(exp){
-            console.error(exp);
+            this.products.error = exp;
         }
         
     }
@@ -122,6 +132,33 @@ export default class AvailableProducts extends LightningElement {
                     .then(result=>this.refreshTime = Date.now())//TODO: we have all the data at hand, can do without fetching from server
                     .catch(e=>this.products.error = e.body.message + '\n' + e.body.stackTrace);
                 break;
+        }
+    }
+
+    handleActivate(){
+        try{
+            activate({orderId: this.recordId})
+            .then((x)=>
+            {
+                this.refreshTime = Date.now();
+            })
+            .catch(x=>{
+                let  json =  JSON.stringify( x );
+                const evt = new ShowToastEvent({
+                    title: x.body.message,
+                    message: x.body.stack,
+                    variant: 'error',
+                });
+                this.dispatchEvent(evt);
+            });
+        }
+        catch(exp){
+            const evt = new ShowToastEvent({
+                title: 'Internal Error',
+                message: JSON.stringify( exp),
+                variant: 'error',
+            });
+            this.dispatchEvent(evt);
         }
     }
 

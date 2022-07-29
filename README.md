@@ -30,4 +30,4 @@
 
 5. component has an “Activate” button that sets the status of the order and order items to “Activated”
 
-    a. When activated the end user will not be able to add new order items or confirm the order for a second time.
+    a. ✅When activated the end user will not be able to add new order items or confirm the order for a second time.

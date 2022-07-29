@@ -21,8 +21,13 @@ public with sharing class OrderProductController {
         return service.addProduct(itemObject);
     }
 
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled()
     public static void activate(Id orderId) {
         service.activate(orderId);
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static string getOrderStatus(Id orderId){
+        return service.getOrdertatus(orderId);  
     }
 }

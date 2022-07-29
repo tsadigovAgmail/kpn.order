@@ -42,5 +42,10 @@ public with sharing class OrderService {
 
     public void activate(Id orderId){
         SapOrder.instance.activate(OrderDto.wrap(orders.getById(orderId)));
+        update new Order(Id=orderId,Status='Activated');
+    }
+
+    public String getOrdertatus(Id orderId){
+        return orders.getById(orderId).Status;
     }
 }
