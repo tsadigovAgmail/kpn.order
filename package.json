@@ -1,5 +1,9 @@
 {
   "name": "salesforce-app",
+  "author": {
+    "name": "Tural SADIK",
+    "email": "corporate@turalsadik.com"
+  },
   "private": true,
   "version": "1.0.0",
   "description": "Salesforce App",
