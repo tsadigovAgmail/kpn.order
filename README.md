@@ -1,18 +1,19 @@
-# Salesforce DX Project: Next Steps
+# AvailableProducts - displays available products suitable for Order based on Order’s pricebook
 
-Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
+1. “Available Products” - displays available products suitable for Order based on Order’s price book
 
-## How Do You Plan to Deploy Your Changes?
+2. The “Available Products” component displays orderable products in a 2-column list displaying Name and List Price
 
-Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
+    a. Products that are already added to the order should appear on top
+    
+    b. Each product can only appear once in the list
+    
+    c. (Optional) Sort by column
+    
+    d. (Optional) Search by product name
 
-## Configure Your Salesforce DX Project
+3. The “Available Products” component has to provide the ability for the user to add a product from the list to the order
 
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
-
-## Read All About It
-
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+    a. When the same product is not yet added to the order it will be added with a quantity of 1
+    
+    b. When the product already exists the quantity of the existing order product should be increased by 1
